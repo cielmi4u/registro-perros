@@ -1,0 +1,298 @@
+/* ===== REGLAS GENERALES ===== */
+
+* { box-sizing: border-box; } /* "*" = todos los elementos. Hace que el ancho incluya el relleno y el borde, para que las cajas no se salgan de la pantalla */
+
+:root { /* :root = variables globales; se pueden usar en todo el archivo con var(--nombre) */
+  --azul: #2563eb; /* Azul principal */
+  --azul-oscuro: #1e40af; /* Azul más oscuro para títulos y contrastes */
+  --amarillo: #fbbf24; /* Amarillo principal */
+  --amarillo-oscuro: #f59e0b; /* Amarillo más oscuro para sombras y resaltados */
+}
+
+body { /* Estilo de toda la página */
+  margin: 0; /* Quita el margen que el navegador pone por defecto */
+  padding: 20px; /* Espacio interior de 20px alrededor del contenido */
+  font-family: "Comic Sans MS", "Trebuchet MS", "Verdana", sans-serif; /* Tipo de letra divertida; si no existe la primera, usa la siguiente */
+  
+  background-image: url("fondo.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+
+  color: #1f2937; /* Color del texto (gris muy oscuro) */
+  min-height: 100vh; /* Altura mínima = toda la pantalla, para que el fondo cubra todo */
+}
+
+/* ===== TARJETAS (las cajas blancas) ===== */
+
+.tarjeta { /* El punto (.) significa "todo lo que tenga class='tarjeta'" */
+  max-width: 480px; /* Ancho máximo de la tarjeta */
+  margin: 0 auto; /* Arriba/abajo 0, y "auto" a los lados = centrada */
+  background: #fff; /* Fondo blanco */
+  border-radius: 28px; /* Esquinas muy redondeadas */
+  padding: 28px 24px; /* Espacio interior: 28px arriba/abajo, 24px a los lados */
+  border: 4px solid var(--amarillo); /* Borde amarillo de 4px */
+  box-shadow: 0 8px 24px rgba(37, 99, 235, 0.18); /* Sombra azul suave debajo de la tarjeta */
+  position: relative; /* Permite colocar la patita decorativa dentro de la tarjeta */
+  overflow: hidden; /* Lo que sobresalga de la tarjeta se recorta */
+}
+
+.tarjeta::before { /* ::before agrega un elemento decorativo antes del contenido */
+  content: "🐾"; /* El contenido decorativo es una huellita */
+  position: absolute; /* Se coloca en un lugar exacto de la tarjeta */
+  top: -10px; /* 10px hacia arriba (queda medio cortada) */
+  right: -6px; /* 6px hacia la derecha */
+  font-size: 4rem; /* Tamaño grande */
+  opacity: 0.12; /* Casi transparente para que sea de fondo */
+  transform: rotate(15deg); /* La gira 15 grados */
+}
+
+h1 { /* Título principal */
+  font-size: 1.5rem; /* Tamaño de letra */
+  margin: 0 0 4px 0; /* Márgenes: arriba 0, derecha 0, abajo 4px, izquierda 0 */
+  text-align: center; /* Texto centrado */
+  color: var(--azul-oscuro); /* Color azul oscuro (usa la variable de arriba) */
+}
+
+h1::before { content: "🐶 "; } /* Agrega un perrito antes del título */
+
+h1::after { content: " 🐾"; } /* Agrega una huellita después del título */
+
+.subtitulo { /* Frase debajo del título */
+  text-align: center; /* Centrada */
+  color: var(--amarillo-oscuro); /* Color amarillo oscuro */
+  font-weight: bold; /* Letra en negritas */
+  margin-bottom: 10px; /* Espacio debajo */
+}
+
+/* ===== CAMPOS DEL FORMULARIO ===== */
+
+label { /* Los textos que explican cada campo */
+  display: block; /* Ocupa toda una línea, para que el campo quede debajo */
+  margin-top: 16px; /* Espacio arriba */
+  margin-bottom: 4px; /* Espacio abajo */
+  font-size: 0.95rem; /* Tamaño de letra */
+  font-weight: bold; /* Negritas */
+  color: var(--azul-oscuro); /* Azul oscuro */
+}
+
+input[type="text"], input[type="file"], input[type="number"] { /* Las tres clases de cajitas comparten estilo (la coma las junta) */
+  width: 100%; /* Ocupan todo el ancho disponible */
+  padding: 11px 14px; /* Espacio interior */
+  border: 3px solid #dbeafe; /* Borde azul clarito */
+  border-radius: 16px; /* Esquinas redondeadas */
+  font-size: 1rem; /* Tamaño del texto que se escribe */
+  font-family: inherit; /* Usa la misma letra del resto de la página */
+  background: #f8fbff; /* Fondo azul casi blanco */
+  transition: border-color 0.15s ease; /* Si el borde cambia de color, lo hace suavemente */
+}
+
+input[type="text"]:focus { /* :focus = cuando haces clic dentro de la cajita */
+  outline: none; /* Quita el contorno feo que pone el navegador */
+  border-color: var(--azul); /* El borde se vuelve azul fuerte */
+  background: #fff; /* El fondo se vuelve blanco */
+}
+
+input[type="file"] { /* Solo el campo de la foto (se suma al estilo de arriba) */
+  background: #fffbeb; /* Fondo amarillito */
+  border-color: var(--amarillo); /* Borde amarillo */
+  cursor: pointer; /* El mouse se vuelve manita al pasar encima */
+}
+
+select { /* Las listas desplegables (raza y colores) */
+  width: 100%; /* Ancho completo */
+  padding: 11px 14px; /* Espacio interior */
+  border: 3px solid #dbeafe; /* Borde azul clarito */
+  border-radius: 16px; /* Esquinas redondeadas */
+  font-size: 1rem; /* Tamaño de letra */
+  font-family: inherit; /* Misma letra que el resto */
+  background: #f8fbff; /* Fondo azul casi blanco */
+  color: #1f2937; /* Color del texto */
+}
+
+select:focus { /* Cuando la lista está seleccionada */
+  outline: none; /* Sin contorno del navegador */
+  border-color: var(--azul); /* Borde azul fuerte */
+  background: #fff; /* Fondo blanco */
+}
+
+.fila-ubicacion { /* Caja que contiene latitud y longitud */
+  display: flex; /* Pone sus hijos en fila, lado a lado */
+  gap: 10px; /* Espacio de 10px entre las dos cajitas */
+}
+
+.fila-ubicacion input { /* Las cajitas dentro de esa fila */
+  flex: 1; /* Las dos se reparten el ancho por igual */
+  min-width: 0; /* Permite que se encojan en pantallas pequeñas */
+}
+
+/* ===== BOTÓN ===== */
+
+button { /* El botón "Registrar perro" */
+  width: 100%; /* Ancho completo */
+  margin-top: 24px; /* Espacio arriba */
+  padding: 16px; /* Espacio interior (lo hace más alto) */
+  background: linear-gradient(135deg, var(--azul) 0%, var(--azul-oscuro) 100%); /* Degradado de azul a azul oscuro */
+  color: #fff; /* Texto blanco */
+  border: none; /* Sin borde */
+  border-radius: 999px; /* Radio enorme = forma de píldora totalmente redondeada */
+  font-size: 1.1rem; /* Letra un poco más grande */
+  font-weight: bold; /* Negritas */
+  font-family: inherit; /* Misma letra que el resto */
+  cursor: pointer; /* Manita al pasar el mouse */
+  box-shadow: 0 6px 0 var(--amarillo-oscuro), 0 8px 16px rgba(0,0,0,0.15); /* Dos sombras: una amarilla sólida (efecto de "grosor") y otra suave */
+  transition: transform 0.1s ease, box-shadow 0.1s ease; /* Los cambios al presionar se animan rápido */
+  letter-spacing: 0.5px; /* Separa un poquito las letras */
+}
+
+button::before { content: "🐕 "; } /* Agrega un perrito antes del texto del botón */
+
+button:active { /* :active = mientras lo presionas */
+  transform: translateY(4px); /* El botón baja 4px */
+  box-shadow: 0 2px 0 var(--amarillo-oscuro), 0 4px 10px rgba(0,0,0,0.15); /* La sombra se encoge: parece que se hunde */
+}
+
+/* ===== TEXTOS DE APOYO Y ELEMENTOS OCULTOS ===== */
+
+.ayuda { /* Textos pequeños de ayuda (mensajes) */
+  font-size: 0.88rem; /* Letra pequeña */
+  color: #6b7280; /* Gris */
+  text-align: center; /* Centrado */
+  margin-top: 10px; /* Espacio arriba */
+}
+
+.oculto { display: none; } /* Todo lo que tenga class="oculto" desaparece; JavaScript lo quita o lo pone */
+
+#previsualizacion { /* El # significa "el elemento con id='previsualizacion'": la foto elegida */
+  display: block; /* Ocupa su propia línea */
+  max-width: 100%; /* Nunca más ancha que la tarjeta */
+  max-height: 220px; /* Altura máxima */
+  margin-top: 12px; /* Espacio arriba */
+  border-radius: 16px; /* Esquinas redondeadas */
+  border: 3px solid var(--amarillo); /* Borde amarillo */
+  object-fit: cover; /* La imagen llena el espacio sin deformarse (recorta lo que sobre) */
+}
+
+/* ===== TARJETAS DEL MAPA Y LA LISTA ===== */
+
+.tarjeta-secundaria { /* Se suma a .tarjeta en las tarjetas 2 y 3 */
+  max-width: 480px; /* Mismo ancho máximo */
+  margin: 20px auto 0 auto; /* 20px de espacio arriba, centrada a los lados */
+}
+
+.tarjeta-secundaria h2 { /* Los títulos h2 dentro de esas tarjetas */
+  font-size: 1.15rem; /* Tamaño */
+  color: var(--azul-oscuro); /* Color */
+  margin: 0 0 4px 0; /* Márgenes */
+  text-align: center; /* Centrado */
+}
+
+/* ===== EL MAPA ===== */
+
+#mapaContenedor { /* El marco alrededor del mapa */
+  margin-top: 12px; /* Espacio arriba */
+  border-radius: 18px; /* Esquinas redondeadas */
+  border: 3px solid var(--amarillo); /* Borde amarillo */
+  overflow: hidden; /* Recorta lo que se salga del marco (por ejemplo, pines lejanos) */
+
+
+  background-image: url("mapa.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+#mapaSvg {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 583 / 478;
+  display: block;
+  background: transparent;
+}
+
+
+.etiqueta-mapa {
+  fill: var(--azul-oscuro);
+  font-size: 26px;
+  font-weight: bold;
+  letter-spacing: 3px;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* ===== LOS PINES ===== */
+
+.pin { /* Cada círculo que representa un perrito */
+  fill: var(--azul); /* Relleno azul */
+  stroke: var(--amarillo); /* Contorno amarillo */
+  stroke-width: 3; /* Grosor del contorno */
+  cursor: pointer; /* Manita al pasar el mouse */
+  transition: r 0.15s ease, fill 0.15s ease; /* Cambios de tamaño y color animados */
+}
+
+.pin:hover { fill: var(--azul-oscuro); r: 11; } /* Al pasar el mouse: más oscuro y crece (r = radio) */
+
+.pin.resaltado { /* Pin con las dos clases a la vez: el que se seleccionó desde la lista */
+  fill: var(--amarillo-oscuro); /* Se vuelve amarillo */
+  stroke: var(--azul-oscuro); /* Contorno azul oscuro */
+  stroke-width: 4; /* Contorno más grueso */
+  r: 14; /* Más grande */
+}
+
+/* ===== CUADRO DE INFORMACIÓN DEL PIN ===== */
+
+.info-pin { /* Cuadro que aparece al tocar un pin */
+  margin-top: 14px; /* Espacio arriba */
+  padding: 12px; /* Espacio interior */
+  background: #fffbeb; /* Fondo amarillito */
+  border: 3px solid var(--amarillo); /* Borde amarillo */
+  border-radius: 16px; /* Esquinas redondeadas */
+  display: flex; /* Foto y texto en fila */
+  gap: 12px; /* Espacio entre foto y texto */
+  align-items: center; /* Centrados verticalmente */
+}
+
+.info-pin img { /* La foto pequeña dentro del cuadro */
+  width: 64px; /* Ancho fijo */
+  height: 64px; /* Alto fijo */
+  border-radius: 12px; /* Esquinas redondeadas */
+  object-fit: cover; /* Llena el espacio sin deformarse */
+  border: 2px solid var(--azul); /* Borde azul */
+  flex-shrink: 0; /* Evita que la foto se aplaste cuando falta espacio */
+}
+
+.info-pin div { font-size: 0.88rem; line-height: 1.4; } /* El texto de información: letra pequeña y con buen espacio entre renglones */
+
+/* ===== LISTA DE PERRITOS ===== */
+
+.lista-perros { /* Contenedor de todas las tarjetitas de perritos */
+  margin-top: 12px; /* Espacio arriba */
+  display: flex; /* Los hijos se acomodan en fila */
+  flex-wrap: wrap; /* Si no caben, bajan a la siguiente línea */
+  gap: 12px; /* Espacio entre tarjetitas */
+  justify-content: center; /* Centradas */
+}
+
+.perro-card { /* Cada tarjetita con foto y nombre */
+  width: 100px; /* Ancho fijo */
+  text-align: center; /* Texto centrado */
+}
+
+.perro-card img { /* La foto de cada perrito */
+  width: 100px; /* Cuadrada de 100x100 */
+  height: 100px;
+  border-radius: 16px; /* Esquinas redondeadas */
+  object-fit: cover; /* Llena el cuadro sin deformarse */
+  border: 3px solid var(--amarillo); /* Borde amarillo */
+  box-shadow: 0 4px 10px rgba(37, 99, 235, 0.15); /* Sombra suave azul */
+  cursor: pointer; /* Manita: indica que se puede tocar */
+}
+
+.perro-card span { /* El nombre debajo de la foto */
+  display: block; /* Ocupa su propia línea */
+  margin-top: 6px; /* Espacio arriba */
+  font-weight: bold; /* Negritas */
+  font-size: 0.85rem; /* Letra pequeña */
+  color: var(--azul-oscuro); /* Azul oscuro */
+  word-break: break-word; /* Si el nombre es muy largo, lo parte en vez de salirse */
+}

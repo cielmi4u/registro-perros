@@ -1,0 +1,128 @@
+<!DOCTYPE html> <!-- Le dice al navegador que este archivo es una página web moderna (HTML5) -->
+<html lang="es"> <!-- Abre la página; lang="es" indica que el idioma es español -->
+<head> <!-- Zona de información "invisible" de la página (no se muestra en pantalla) -->
+<meta charset="UTF-8"> <!-- Permite mostrar acentos, ñ y emojis correctamente -->
+<meta name="viewport" content="width=device-width, initial-scale=1"> <!-- Hace que la página se adapte al ancho del celular -->
+<title>Registro de perros</title> <!-- Texto que aparece en la pestaña del navegador -->
+<link rel="stylesheet" href="style.css"> <!-- Conecta el archivo de diseño (style.css) con esta página -->
+</head> <!-- Cierra la zona de información -->
+<body> <!-- Aquí empieza todo lo que SÍ se ve en pantalla -->
+
+  <!-- ================= TARJETA 1: EL FORMULARIO ================= -->
+  <div class="tarjeta"> <!-- Caja contenedora; class="tarjeta" le da el estilo de tarjeta blanca redondeada -->
+    <h1>Registro de perros callejeros</h1> <!-- Título principal (el más grande) -->
+    <p class="subtitulo">¡Ayúdanos a encontrarles un hogar! 🏡</p> <!-- Frase pequeña debajo del título -->
+
+    <form id="formPerro"> <!-- Agrupa todos los campos para poder enviarlos juntos; id="formPerro" es su nombre para JavaScript -->
+
+      <label>📸 Foto del perro</label> <!-- Texto que explica qué va en el campo de abajo -->
+      <input type="file" id="foto" name="foto" accept="image/*" capture="environment" required> <!-- Botón para elegir/tomar foto: accept="image/*" solo permite imágenes, capture="environment" abre la cámara trasera en celulares, required obliga a llenarlo -->
+      <img id="previsualizacion" class="oculto"> <!-- Imagen donde se mostrará la foto elegida; empieza oculta (class="oculto") -->
+
+      <label>🐶 Nombre</label> <!-- Etiqueta del nombre -->
+      <input type="text" id="nombre" name="nombre" required> <!-- Cajita para escribir texto; name="nombre" es el nombre con el que viaja el dato al servidor -->
+
+      <label>🏷️ Raza</label> <!-- Etiqueta de la raza -->
+      <select id="raza" name="raza"> <!-- Lista desplegable para elegir una opción -->
+        <option value="">Selecciona una raza</option> <!-- Opción vacía inicial (value="" significa "sin elegir") -->
+        <option>Mestizo (criollo)</option> <!-- Cada <option> es una opción de la lista -->
+        <option>Labrador</option>
+        <option>Pastor Alemán</option>
+        <option>Chihuahua</option>
+        <option>Pitbull</option>
+        <option>Poodle (Caniche)</option>
+        <option>Schnauzer</option>
+        <option>Bulldog Francés</option>
+        <option>Husky Siberiano</option>
+        <option>Yorkshire Terrier</option>
+      </select> <!-- Cierra la lista de razas -->
+
+      <label>📍 Calle donde se encontró</label> <!-- Etiqueta de la calle -->
+      <input type="text" id="calle" name="calle" required> <!-- Cajita de texto obligatoria para la calle -->
+
+      <label>↔️ Entre calle (opcional)</label> <!-- Etiqueta de la primera calle de referencia -->
+      <input type="text" id="entreCalle1" name="entreCalle1"> <!-- Cajita opcional (no tiene required) -->
+
+      <label>↔️ Y calle (opcional)</label> <!-- Etiqueta de la segunda calle de referencia -->
+      <input type="text" id="entreCalle2" name="entreCalle2"> <!-- Cajita opcional -->
+
+      <label>🎨 Color principal</label> <!-- Etiqueta del color principal -->
+      <select id="colorPrincipal" name="colorPrincipal" required> <!-- Lista de colores; required = hay que elegir uno -->
+        <option value="">Selecciona un color</option> <!-- Opción vacía inicial -->
+        <option>Negro</option> <!-- Las siguientes líneas son las opciones de color -->
+        <option>Blanco</option>
+        <option>Café</option>
+        <option>Dorado</option>
+        <option>Gris</option>
+        <option>Manchado (blanco y negro)</option>
+        <option>Atigrado</option>
+        <option>Canela</option>
+        <option>Crema</option>
+        <option>Tricolor</option>
+      </select> <!-- Cierra la lista -->
+
+      <label>🎨 Color secundario (opcional)</label> <!-- Etiqueta del segundo color -->
+      <select id="colorSecundario" name="colorSecundario"> <!-- Igual que la anterior pero SIN required (es opcional) -->
+        <option value="">Ninguno</option> <!-- Aquí la opción vacía significa "sin segundo color" -->
+        <option>Negro</option> <!-- Mismas opciones de color de arriba -->
+        <option>Blanco</option>
+        <option>Café</option>
+        <option>Dorado</option>
+        <option>Gris</option>
+        <option>Manchado (blanco y negro)</option>
+        <option>Atigrado</option>
+        <option>Canela</option>
+        <option>Crema</option>
+        <option>Tricolor</option>
+      </select>
+
+      <label>🎨 Color secundario 2 (opcional)</label> <!-- Etiqueta del tercer color -->
+      <select id="colorTerciario" name="colorTerciario"> <!-- Tercer color, también opcional -->
+        <option value="">Ninguno</option>
+        <option>Negro</option> <!-- Mismas opciones de color -->
+        <option>Blanco</option>
+        <option>Café</option>
+        <option>Dorado</option>
+        <option>Gris</option>
+        <option>Manchado (blanco y negro)</option>
+        <option>Atigrado</option>
+        <option>Canela</option>
+        <option>Crema</option>
+        <option>Tricolor</option>
+      </select>
+
+      <label>📍 Ubicación (latitud, longitud)</label> <!-- Etiqueta de las coordenadas -->
+      <div class="fila-ubicacion"> <!-- Caja que pone las dos cajitas de coordenadas lado a lado -->
+        <input type="number" step="any" id="latitud" name="latitud" placeholder="Latitud"> <!-- Cajita numérica; step="any" permite decimales; placeholder es el texto gris de ayuda -->
+        <input type="number" step="any" id="longitud" name="longitud" placeholder="Longitud"> <!-- Igual, para la longitud -->
+      </div> <!-- Cierra la fila -->
+      <p id="estadoUbicacion" class="ayuda">Obteniendo ubicación...</p> <!-- Mensaje que JavaScript cambia según si el GPS funcionó o no -->
+
+      <button type="submit">Registrar perro</button> <!-- Botón que envía el formulario -->
+      <p id="mensaje" class="ayuda"></p> <!-- Espacio vacío donde JavaScript escribe "Guardando..." o el resultado -->
+    </form> <!-- Cierra el formulario -->
+  </div> <!-- Cierra la tarjeta 1 -->
+
+  <!-- ================= TARJETA 2: EL MAPA ================= -->
+  <div class="tarjeta tarjeta-secundaria" id="seccionMapa"> <!-- Otra tarjeta; el id permite que JavaScript se desplace hasta aquí -->
+    <h2>🗺️ Mapa de Saltillo</h2> <!-- Título de la sección (h2 = título mediano) -->
+    <p class="ayuda">Toca un pin (o una foto de la lista de abajo) para ver la información de ese perrito.</p> <!-- Instrucción para el usuario -->
+    <div id="mapaContenedor"> <!-- Marco que rodea el dibujo del mapa -->
+      <svg id="mapaSvg" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid meet"> <!-- Lienzo de dibujo; viewBox define un espacio de 400 de ancho x 300 de alto para dibujar -->
+        
+
+        <g id="capaPines"></g> <!-- Grupo VACÍO donde JavaScript dibuja los pines de los perritos -->
+      </svg> <!-- Cierra el lienzo del mapa -->
+    </div> <!-- Cierra el marco del mapa -->
+    <div id="infoPin" class="info-pin oculto"></div> <!-- Cuadro donde JavaScript muestra la info del perrito; empieza oculto -->
+  </div> <!-- Cierra la tarjeta 2 -->
+
+  <!-- ================= TARJETA 3: LISTA DE PERRITOS ================= -->
+  <div class="tarjeta tarjeta-secundaria"> <!-- Tercera tarjeta -->
+    <h2>🐕 Perritos registrados</h2> <!-- Título de la lista -->
+    <div id="listaPerros" class="lista-perros"></div> <!-- Espacio VACÍO donde JavaScript pone la foto y nombre de cada perrito -->
+  </div> <!-- Cierra la tarjeta 3 -->
+
+  <script src="app.js"></script> <!-- Carga el archivo de JavaScript (el "cerebro"); va al final para que los elementos de arriba ya existan -->
+</body> <!-- Cierra la parte visible -->
+</html> <!-- Cierra la página -->

@@ -1,0 +1,87 @@
+# Perritos de la calle · Proyecto 2
+#   copy .env.example .env
+#   docker compose up --build
+# Pagina local: http://localhost:8080   ·   URL publica: docker compose logs tunel
+
+services:
+  # ---------- Base de datos (Oracle XE 21c, mismo esquema del P1) ----------
+  bd:
+    image: gvenzl/oracle-xe:21-slim
+    environment:
+      ORACLE_PASSWORD: ${ORACLE_PASSWORD}
+      APP_USER: ${BD_USUARIO}
+      APP_USER_PASSWORD: ${BD_PASSWORD}
+    volumes:
+      - oracle_datos:/opt/oracle/oradata
+      - ./sql:/sql:ro
+      - ./docker/01-esquema.sh:/container-entrypoint-initdb.d/01-esquema.sh:ro
+    ports:
+      - "1522:1521"   # para SQL Developer desde Windows (1522, por si ya tienes Oracle en 1521)
+    healthcheck:
+      test: ["CMD", "healthcheck.sh"]
+      interval: 15s
+      timeout: 10s
+      retries: 40
+      start_period: 300s
+
+  # ---------- Backend Java del P1 (tambien sirve el frontend web/) ----------
+  backend:
+    build: .
+    environment:
+      DB_HOST: ${BD_HOST:-bd}
+      DB_PORT: "1521"
+      DB_SERVICE: ${BD_SERVICIO:-XEPDB1}
+      DB_USER: ${BD_USUARIO}
+      DB_PASSWORD: ${BD_PASSWORD}
+      SERVER_PORT: "8081"
+      FOTOS_CARPETA: fotos
+      TZ: America/Monterrey
+    volumes:
+      - fotos:/app/fotos          # las fotos viven en un volumen, fuera de la app
+    extra_hosts:
+      - "host.docker.internal:host-gateway"   # para usar el Oracle de Windows
+    # espera a que Oracle termine de crear la base y correr los scripts
+    # (para usar el Oracle de Windows: ver README, se levanta con --no-deps)
+    depends_on:
+      bd:
+        condition: service_healthy
+
+  # ---------- Servicio Elixir (P2) ----------
+  funcional:
+    build: ./funcional
+    environment:
+      BACKEND_URL: http://backend:8081   # opcion B: los datos llegan del backend
+      TZ: America/Monterrey
+    depends_on: [backend]
+    # sin ports: solo le habla el proxy, por la red interna
+
+  # ---------- Proxy: la unica puerta de entrada ----------
+  proxy:
+    image: nginx:1.27-alpine
+    volumes:
+      - ./proxy/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    ports:
+      - "8080:80"     # para probar en local: http://localhost:8080
+    depends_on: [backend, funcional]
+
+  # ---------- Tunel de Cloudflare ----------
+  tunel:
+    image: cloudflare/cloudflared:latest
+    command: tunnel --no-autoupdate --url http://proxy:80
+    depends_on: [proxy]
+
+  # ---------- Herramientas de mix (no se levanta con up) ----------
+  herramientas:
+    image: elixir:1.18-alpine
+    profiles: ["herramientas"]
+    working_dir: /app
+    volumes:
+      - ./funcional:/app
+      - mix_cache:/root/.mix
+      - hex_cache:/root/.hex
+
+volumes:
+  oracle_datos:
+  fotos:
+  mix_cache:
+  hex_cache:
